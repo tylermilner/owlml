@@ -11,6 +11,15 @@ import AVKit
 import MobileCoreServices
 
 class ViewController: UIViewController {
+    
+    // MARK: - IBOutlets
+    
+    @IBOutlet private var videoPlayerView: UIView!
+    @IBOutlet private var collectionView: UICollectionView!
+    
+    // MARK: - Properties
+    
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,13 +30,15 @@ class ViewController: UIViewController {
         
         presentDocumentPicker()
     }
+    
+    // MARK: - Private
 
     private func playVideo(at url: URL) {
         let player = AVPlayer(url: url)
         
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = view.bounds
-        view.layer.addSublayer(playerLayer)
+        videoPlayerView.layer.addSublayer(playerLayer)
         player.play()
     }
     
@@ -40,10 +51,25 @@ class ViewController: UIViewController {
     }
 }
 
+// MARK: - UIDocumentPickerDelegate
+
 extension ViewController: UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let videoURL = urls.first else { return }
         playVideo(at: videoURL)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension ViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell()
     }
 }
