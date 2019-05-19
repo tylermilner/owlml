@@ -58,7 +58,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="pgK-7j-3fx" id="hHy-Ze-W4o"/>
-                        <outlet property="videoPlayerView" destination="Qze-XY-aN5" id="lav-IY-X8v"/>
+                        <outlet property="videoView" destination="Qze-XY-aN5" id="lav-IY-X8v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

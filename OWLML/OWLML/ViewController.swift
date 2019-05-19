@@ -14,15 +14,19 @@ class ViewController: UIViewController {
     
     // MARK: - IBOutlets
     
-    @IBOutlet private var videoPlayerView: UIView!
+    @IBOutlet private var videoView: UIView!
     @IBOutlet private var collectionView: UICollectionView!
     
     // MARK: - Properties
+    
+    private var player: AVPlayer?
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupTapGestureRecognizer()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -32,14 +36,31 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Private
+    
+    private func setupTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(videoViewTapped(_:)))
+        videoView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func videoViewTapped(_ recognizer: UITapGestureRecognizer) {
+        let tapLocation = recognizer.location(in: videoView)
+        debugPrint("Tapped \(tapLocation)")
+        
+        let boxSize = CGSize(width: 30, height: 30)
+        
+        // Center box around tap location
+        let boxView = BoxView(frame: CGRect(x: tapLocation.x - (0.5 * boxSize.width), y: tapLocation.y - (0.5 * boxSize.height), width: boxSize.width, height: boxSize.height))
+        
+        videoView.addSubview(boxView)
+    }
 
-    private func playVideo(at url: URL) {
+    private func loadVideo(at url: URL) {
         let player = AVPlayer(url: url)
+        self.player = player
         
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = view.bounds
-        videoPlayerView.layer.addSublayer(playerLayer)
-        player.play()
+        videoView.layer.addSublayer(playerLayer)
     }
     
     private func presentDocumentPicker() {
@@ -57,7 +78,7 @@ extension ViewController: UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let videoURL = urls.first else { return }
-        playVideo(at: videoURL)
+        loadVideo(at: videoURL)
     }
 }
 
@@ -73,3 +94,7 @@ extension ViewController: UICollectionViewDataSource {
         return UICollectionViewCell()
     }
 }
+
+// MARK: - UITapGestureRecognizer
+
+
