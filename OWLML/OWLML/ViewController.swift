@@ -28,12 +28,7 @@ class ViewController: UIViewController {
         ]
     }
     private var player: AVPlayer?
-    private var selectedBoxView: BoxView? {
-        didSet {
-            // TODO: Create a "selected" property on BoxView so that it can handle the stroke itself
-            selectedBoxView?.strokeWidth = selectedBoxView != nil ? 2 : 1
-        }
-    }
+    private var selectedBoxView: BoxView?
     
     // MARK: - Lifecycle
 
@@ -48,31 +43,31 @@ class ViewController: UIViewController {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let firstTouch = touches.first {
-            let touchLocation = firstTouch.location(in: videoView)
-            
-            let hitView = videoView.hitTest(touchLocation, with: event)
-            
-            let existingView = videoView.subviews.first {
-                guard let boxView = $0 as? BoxView else { return false }
-                return boxView == hitView
-            } as? BoxView
-            
-            // Set existing view to a "selected" state to move it around
-            if let selectedView = existingView {
-                debugPrint("Selected \(selectedView)")
-                selectedBoxView = selectedView
+        guard let touch = touches.first else { return }
+        
+        let touchLocation = touch.location(in: videoView)
+        
+        let tappedView = videoView.hitTest(touchLocation, with: event)
+        
+        // Find the corresponding BoxView subview
+        let selectedView = videoView.subviews.first { ($0 as? BoxView) == tappedView } as? BoxView
+        
+        if let selectedView = selectedView {
+            // Toggle the selected state of the corresponding view
+            selectedView.isSelected.toggle()
+            selectedBoxView = selectedView
+        } else if selectedBoxView != nil {
+            // Deselect the existing selected view
+            selectedBoxView?.isSelected.toggle()
+            selectedBoxView = nil
+        } else {
             // Create a new box view
-            } else {
-                debugPrint("Tapped \(touchLocation)")
-                
-                let boxSize = CGSize(width: 30, height: 30)
-                
-                // Center box around tap location
-                let boxView = BoxView(frame: CGRect(x: touchLocation.x - (0.5 * boxSize.width), y: touchLocation.y - (0.5 * boxSize.height), width: boxSize.width, height: boxSize.height))
-                
-                videoView.addSubview(boxView)
-            }
+            let boxSize = CGSize(width: 30, height: 30)
+            
+            // Center box around tap location
+            let boxView = BoxView(frame: CGRect(x: touchLocation.x - (0.5 * boxSize.width), y: touchLocation.y - (0.5 * boxSize.height), width: boxSize.width, height: boxSize.height))
+            
+            videoView.addSubview(boxView)
         }
     }
     

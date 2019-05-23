@@ -13,6 +13,7 @@ class BoxView: UIView {
     // MARK: - Static
     
     static var defaultStrokeWidth: CGFloat = 1.0
+    static var defaultSelectedStrokeWidth: CGFloat = defaultStrokeWidth * 2
     static var defaultStrokeColor: UIColor = .red
     
     // MARK: - Properties
@@ -23,7 +24,19 @@ class BoxView: UIView {
         }
     }
     
+    var selectedStrokeWidth: CGFloat = defaultSelectedStrokeWidth {
+        didSet {
+            updateStroke()
+        }
+    }
+    
     var strokeColor: UIColor = defaultStrokeColor {
+        didSet {
+            updateStroke()
+        }
+    }
+    
+    var isSelected: Bool = false {
         didSet {
             updateStroke()
         }
@@ -50,7 +63,7 @@ class BoxView: UIView {
     // MARK: - Private
     
     private func updateStroke() {
-        layer.borderWidth = strokeWidth
+        layer.borderWidth = isSelected ? selectedStrokeWidth : strokeWidth
         layer.borderColor = strokeColor.cgColor
     }
 }
