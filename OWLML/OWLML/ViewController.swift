@@ -19,7 +19,21 @@ class ViewController: UIViewController {
     
     // MARK: - Properties
     
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(keyboardKeyTapped(_:)), discoverabilityTitle: "Nudge selected box up"),
+            UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(keyboardKeyTapped(_:)), discoverabilityTitle: "Nudge selected box down"),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(keyboardKeyTapped(_:)), discoverabilityTitle: "Nudge selected box left"),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(keyboardKeyTapped(_:)), discoverabilityTitle: "Nudge selected box right")
+        ]
+    }
     private var player: AVPlayer?
+    private var selectedBoxView: BoxView? {
+        didSet {
+            // TODO: Create a "selected" property on BoxView so that it can handle the stroke itself
+            selectedBoxView?.strokeWidth = selectedBoxView != nil ? 2 : 1
+        }
+    }
     
     // MARK: - Lifecycle
 
@@ -47,7 +61,7 @@ class ViewController: UIViewController {
             // Set existing view to a "selected" state to move it around
             if let selectedView = existingView {
                 debugPrint("Selected \(selectedView)")
-                selectedView.strokeWidth = 4
+                selectedBoxView = selectedView
             // Create a new box view
             } else {
                 debugPrint("Tapped \(touchLocation)")
@@ -63,6 +77,28 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Private
+    
+    @objc private func keyboardKeyTapped(_ keyCommand: UIKeyCommand) {
+        guard let selectedBoxView = selectedBoxView else { return }
+        
+        let translation: CGPoint = keyCommand.input.flatMap {
+            switch $0 {
+            case UIKeyCommand.inputUpArrow:
+                return CGPoint(x: 0, y: -1)
+            case UIKeyCommand.inputDownArrow:
+                return CGPoint(x: 0, y: 1)
+            case UIKeyCommand.inputLeftArrow:
+                return CGPoint(x: -1, y: 0)
+            case UIKeyCommand.inputRightArrow:
+                return CGPoint(x: 1, y: 0)
+            default:
+                return nil
+            }
+        } ?? .zero
+        
+        let newFrame = selectedBoxView.frame.offsetBy(dx: translation.x, dy: translation.y)
+        selectedBoxView.frame = newFrame
+    }
     
     @objc private func videoViewTapped(_ recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: videoView)
