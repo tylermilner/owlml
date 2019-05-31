@@ -32,15 +32,32 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="8Wu-K9-0z5">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SelectionPreviewCollectionViewCell" id="8Wu-K9-0z5" customClass="SelectionPreviewCollectionViewCell" customModule="OWLML" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l9c-GZ-cU5">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </imageView>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="l9c-GZ-cU5" firstAttribute="top" secondItem="8Wu-K9-0z5" secondAttribute="top" id="5vM-wx-dXL"/>
+                                            <constraint firstAttribute="trailing" secondItem="l9c-GZ-cU5" secondAttribute="trailing" id="AfW-kX-hCU"/>
+                                            <constraint firstItem="l9c-GZ-cU5" firstAttribute="leading" secondItem="8Wu-K9-0z5" secondAttribute="leading" id="N8L-sk-cXM"/>
+                                            <constraint firstAttribute="bottom" secondItem="l9c-GZ-cU5" secondAttribute="bottom" id="byf-MX-GDS"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="l9c-GZ-cU5" id="8NI-6W-G2q"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="rfz-bX-uny"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -15,6 +15,7 @@
 		A42BE0512290BE22008F8AE1 /* OWLMLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BE0502290BE22008F8AE1 /* OWLMLTests.swift */; };
 		A42BE05C2290BE22008F8AE1 /* OWLMLUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BE05B2290BE22008F8AE1 /* OWLMLUITests.swift */; };
 		A42BE06C2290D40B008F8AE1 /* BoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BE06B2290D40B008F8AE1 /* BoxView.swift */; };
+		A49B5B1922964391009B0D09 /* SelectionPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B5B1822964391009B0D09 /* SelectionPreviewCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		A42BE05B2290BE22008F8AE1 /* OWLMLUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWLMLUITests.swift; sourceTree = "<group>"; };
 		A42BE05D2290BE22008F8AE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A42BE06B2290D40B008F8AE1 /* BoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxView.swift; sourceTree = "<group>"; };
+		A49B5B1822964391009B0D09 /* SelectionPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				A42BE0442290BE22008F8AE1 /* LaunchScreen.storyboard */,
 				A42BE0472290BE22008F8AE1 /* Info.plist */,
 				A42BE06B2290D40B008F8AE1 /* BoxView.swift */,
+				A49B5B1822964391009B0D09 /* SelectionPreviewCollectionViewCell.swift */,
 			);
 			path = OWLML;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 			files = (
 				A42BE03E2290BE20008F8AE1 /* ViewController.swift in Sources */,
 				A42BE03C2290BE20008F8AE1 /* AppDelegate.swift in Sources */,
+				A49B5B1922964391009B0D09 /* SelectionPreviewCollectionViewCell.swift in Sources */,
 				A42BE06C2290D40B008F8AE1 /* BoxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

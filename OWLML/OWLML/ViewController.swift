@@ -10,6 +10,21 @@ import UIKit
 import AVKit
 import MobileCoreServices
 
+// TODO: Remove this (just quick test code)
+extension UIImage {
+    class func imageWithColor(color: UIColor) -> UIImage? {
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        
+        let rect: CGRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0)
+        color.setFill()
+        UIRectFill(rect)
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
 class ViewController: UIViewController {
     
     // MARK: - IBOutlets
@@ -29,6 +44,7 @@ class ViewController: UIViewController {
     }
     private var player: AVPlayer?
     private var selectedBoxView: BoxView?
+    private var selectionPreviews: [UIImage] = []
     
     // MARK: - Lifecycle
 
@@ -66,8 +82,15 @@ class ViewController: UIViewController {
             
             // Center box around tap location
             let boxView = BoxView(frame: CGRect(x: touchLocation.x - (0.5 * boxSize.width), y: touchLocation.y - (0.5 * boxSize.height), width: boxSize.width, height: boxSize.height))
-            
             videoView.addSubview(boxView)
+            
+            // TODO: Generate an image from the contents represented by the boxView
+            
+            // Add a preview of the selection to the collection view
+            if let previewImage = UIImage.imageWithColor(color: .red) {
+                selectionPreviews.append(previewImage)
+                collectionView.reloadData()
+            }
         }
     }
     
@@ -140,14 +163,15 @@ extension ViewController: UIDocumentPickerDelegate {
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return selectionPreviews.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: SelectionPreviewCollectionViewCell.self), for: indexPath) as? SelectionPreviewCollectionViewCell else { fatalError("Unable to dequeue \(SelectionPreviewCollectionViewCell.self)") }
+
+        let image = selectionPreviews[indexPath.item]
+        cell.configure(with: image)
+        
+        return cell
     }
 }
-
-// MARK: - UITapGestureRecognizer
-
-
