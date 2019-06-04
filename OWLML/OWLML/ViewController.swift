@@ -10,21 +10,6 @@ import UIKit
 import AVKit
 import MobileCoreServices
 
-// TODO: Remove this (just quick test code)
-extension UIImage {
-    class func imageWithColor(color: UIColor) -> UIImage? {
-        defer {
-            UIGraphicsEndImageContext()
-        }
-        
-        let rect: CGRect = CGRect(x: 0, y: 0, width: 1, height: 1)
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0)
-        color.setFill()
-        UIRectFill(rect)
-        return UIGraphicsGetImageFromCurrentImageContext()
-    }
-}
-
 class ViewController: UIViewController {
     
     // MARK: - IBOutlets
@@ -85,10 +70,11 @@ class ViewController: UIViewController {
             let boxView = BoxView(frame: CGRect(x: touchLocation.x - (0.5 * boxSize.width), y: touchLocation.y - (0.5 * boxSize.height), width: boxSize.width, height: boxSize.height))
             videoView.addSubview(boxView)
             
-            // TODO: Generate an image from the contents represented by the boxView
-            
-            // Add a preview of the selection to the collection view
-            if let previewImage = UIImage.imageWithColor(color: .red) {
+            // Generate an image from the contents represented by the boxView
+            if let croppedImage = generateCroppedImage(for: boxView) {
+                // Add a preview of the selection to the collection view
+                let previewImage = UIImage(cgImage: croppedImage)
+                
                 selectionPreviews.append(previewImage)
                 collectionView.reloadData()
             }
@@ -96,6 +82,35 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Private
+    
+    private func generateCroppedImage(for boxView: BoxView) -> CGImage? {
+        guard let videoThumbnail = videoThumbnailImage() else { return nil }
+        
+        // Interpolate the crop region from the BoxView's location in the video preview view
+        let cropX = floor((boxView.frame.origin.x / videoView.bounds.width) * CGFloat(videoThumbnail.width))
+        let cropY = floor((boxView.frame.origin.y / videoView.bounds.height) * CGFloat(videoThumbnail.height))
+        let cropWidth = floor((boxView.bounds.width / videoView.bounds.width) * CGFloat(videoThumbnail.width))
+        let cropHeight = floor((boxView.bounds.height / videoView.bounds.height) * CGFloat(videoThumbnail.height))
+        
+        let cropRect = CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
+        
+        return videoThumbnail.cropping(to: cropRect)
+    }
+    
+    private func videoThumbnailImage() -> CGImage? {
+        guard let currentItem = player?.currentItem else { return nil }
+        
+        // Generate thumbnail/screenshot
+        let assetGenerator = AVAssetImageGenerator(asset: currentItem.asset)
+        let currentVideoTime = currentItem.currentTime()
+        
+        do {
+            return try assetGenerator.copyCGImage(at: currentVideoTime, actualTime: nil)
+        } catch {
+            debugPrint(error)
+            return nil
+        }
+    }
     
     @objc private func keyboardKeyTapped(_ keyCommand: UIKeyCommand) {
         guard let selectedBoxView = selectedBoxView else { return }
