@@ -56,6 +56,7 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         
         presentDocumentPicker()
+//        loadEmbeddedVideo()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -137,6 +138,16 @@ class ViewController: UIViewController {
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = view.bounds
         videoView.layer.addSublayer(playerLayer)
+    }
+    
+    private func loadEmbeddedVideo() {
+        guard let videoPath = Bundle.main.path(forResource: "fuel-v-mayhem_busan_pt-1_30s", ofType: "mp4") else {
+            fatalError("Unable to load embedded video")
+        }
+        
+        let videoURL = URL(fileURLWithPath: videoPath)
+        
+        loadVideo(at: videoURL)
     }
     
     private func presentDocumentPicker() {
